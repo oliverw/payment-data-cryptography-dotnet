@@ -47,14 +47,13 @@ namespace GooglePay.PaymentDataCryptography
         public string Verify(string recipientId, string signedMessage)
         {
             var paymentData = Util.Json.Parse<PaymentData>(signedMessage);
-            var innerMessage = Util.Json.Parse<SignedMessage>(paymentData.SignedMessage);
 
             if (!_signatureVerification.VerifyMessage(paymentData, GoogleSenderId, recipientId, _signatureKeyProvider))
             {
                 throw new SecurityException("Cannot verify signature");
             }
 
-            return innerMessage.EncryptedMessage;
+            return paymentData.SignedMessage;
         }
     }
 }
